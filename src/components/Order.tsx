@@ -60,7 +60,7 @@ export default function Order () {
   return (
     <div className="col-span-2 border border-gray-300 rounded-md pb-4
     md:col-span-1 md:pb-0">
-      {/* <h2 className="font-semibold text-4xl px-4 py-4">
+      <h2 className="font-semibold text-4xl px-4 py-4">
         Consumo
       </h2>
 
@@ -146,7 +146,7 @@ export default function Order () {
         <button className="uppercase py-4 text-center bg-black text-white font-semibold w-full">
           Guardar Orden
         </button>
-      </div> */}
+      </div>
     </div>
   )
 }

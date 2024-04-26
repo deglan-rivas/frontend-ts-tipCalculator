@@ -18,7 +18,7 @@ export default function Menu () {
   return (
     <div className="col-span-2
     md:col-span-1">
-      {/* <h2 className="font-semibold text-4xl px-4 py-4 mb-4">
+      <h2 className="font-semibold text-4xl px-4 py-4 mb-4">
         Menú
       </h2>
 
@@ -31,7 +31,7 @@ export default function Menu () {
             />
           ))
         }
-      </div> */}
+      </div>
     </div>
   )
 }
