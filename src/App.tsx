@@ -37,6 +37,11 @@ function App() {
     return calculateSubtotal() + calculateTip()
   }
 
+  function saveOrder (): void {
+    setOrders([])
+    setTip(0)
+  }
+
   return (
     <>
       <h1 className="text-4xl font-semibold text-center bg-emerald-400 py-4 px-2 mb-8
@@ -45,7 +50,7 @@ function App() {
       </h1>
 
       <section className="grid grid-cols-2 gap-y-4
-      md:gap-x-8">
+      md:gap-x-0">
         <Menu
           addOrder={addOrder}
         />
@@ -56,6 +61,8 @@ function App() {
           calculateSubtotal={calculateSubtotal}
           calculateTip={calculateTip}
           calculateTotal={calculateTotal}
+          saveOrder={saveOrder}
+          tip={tip}
         />
       </section>
     </>
