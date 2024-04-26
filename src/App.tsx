@@ -32,7 +32,9 @@ function App() {
         <Menu
           addOrder={addOrder}
         />
-        <Order/>
+        <Order
+          orders={orders}
+        />
       </section>
     </>
   )

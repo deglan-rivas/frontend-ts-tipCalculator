@@ -1,44 +1,15 @@
-const Orders = [
-  {
-    "id": 1,
-    "name": "Pizza a la Leña Chica",
-    "price": 30,
-    "quantity": 3,
-  },
-  {
-    "id": 1,
-    "name": "Pizza a la Leña Mediana",
-    "price": 50,
-    "quantity": 2,
-  },
-  {
-    "id": 1,
-    "name": "Rebanada  de Pay y Limón",
-    "price": 30,
-    "quantity": 1,
-  },
-  {
-    "id": 1,
-    "name": "Pizza a la Leña Chica",
-    "price": 30,
-    "quantity": 3,
-  },
-  {
-    "id": 1,
-    "name": "Pizza a la Leña Mediana",
-    "price": 50,
-    "quantity": 2,
-  },
-  {
-    "id": 1,
-    "name": "Rebanada  de Pay y Limón",
-    "price": 30,
-    "quantity": 1,
-  }
-]
+import { OrderItem } from '../types/index';
 
-function OrderItem ({item}) {
-  const {name, price, quantity} = item
+interface OrderProps {
+  orders: OrderItem[]
+}
+
+interface OrderItemProps {
+  order: OrderItem
+}
+
+function Item ({order}: OrderItemProps) {
+  const {name, price, quantity} = order
   return (
     <div className="flex justify-between items-center px-5 py-4">
       <div>
@@ -56,7 +27,7 @@ function OrderItem ({item}) {
   )
 }
 
-export default function Order () {
+export default function Order ({orders}: OrderProps) {
   return (
     <div className="col-span-2 border border-gray-300 rounded-md pb-4
     md:col-span-1 md:pb-0">
@@ -67,10 +38,10 @@ export default function Order () {
       <div className="border-y divide-y mb-8
       md:max-h-[304px] md:overflow-y-scroll">
         {
-          Orders.map((item) => (
-            <OrderItem 
-              key={item.id} 
-              item={item} 
+          orders.map((order) => (
+            <Item 
+              key={order.id} 
+              order={order} 
             />
           ))
         }
