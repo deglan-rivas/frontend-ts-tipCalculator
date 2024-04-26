@@ -5,6 +5,7 @@ import { MenuItem, OrderItem } from "./types"
 
 function App() {
   const [orders, setOrders] = useState([] as OrderItem[])
+  const [tip, setTip] = useState(0)
 
   function addOrder (menuItem: MenuItem): void {
     const {id} = menuItem
@@ -18,6 +19,10 @@ function App() {
     const newOrder: OrderItem = {...menuItem, quantity: 1}
     setOrders([...orders, newOrder])
     return
+  }
+
+  function deleteOrder (id: OrderItem["id"]): void {
+    setOrders(orders.filter((order) => order.id !== id))
   }
 
   return (
@@ -34,6 +39,8 @@ function App() {
         />
         <Order
           orders={orders}
+          deleteOrder={deleteOrder}
+          setTip={setTip}
         />
       </section>
     </>

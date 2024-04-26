@@ -2,14 +2,38 @@ import { OrderItem } from '../types/index';
 
 interface OrderProps {
   orders: OrderItem[]
+  deleteOrder: (id: OrderItem["id"]) => void
+  setTip: (tip: number) => void
 }
 
 interface OrderItemProps {
   order: OrderItem
+  deleteOrder: (id: OrderItem["id"]) => void
 }
 
-function Item ({order}: OrderItemProps) {
-  const {name, price, quantity} = order
+interface TipProps {
+  description: string
+  value: number
+  setTip: (tip: number) => void
+}
+
+const tips = [
+  {
+    description: "10%",
+    value: 0.1
+  },
+  {
+    description: "20%",
+    value: 0.2
+  },
+  {
+    description: "50%",
+    value: 0.5
+  }
+]
+
+function Item ({order, deleteOrder}: OrderItemProps) {
+  const {id, name, price, quantity} = order
   return (
     <div className="flex justify-between items-center px-5 py-4">
       <div>
@@ -20,14 +44,33 @@ function Item ({order}: OrderItemProps) {
           Cantidad: {quantity} - ${quantity * price}
         </p>
       </div>
-      <div className="w-8 h-8 p-2 text-white font-semibold bg-red-500 rounded-full flex items-center justify-center">
+      <div className="w-8 h-8 p-2 text-white font-semibold bg-red-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-red-600/80"
+        onClick={() => deleteOrder(id)}
+      >
         X
       </div>
     </div>
   )
 }
 
-export default function Order ({orders}: OrderProps) {
+function Tip ({description, value, setTip}: TipProps) {
+  return (
+    <div className="flex items-center gap-2">
+      <label htmlFor={`${value}`}>
+        {description}
+      </label>
+      <input 
+        type="radio"
+        id={`${value}`}
+        name="propina"
+        value={value}
+        onChange={() => setTip(value)}
+      />
+    </div>
+  )
+}
+
+export default function Order ({orders, deleteOrder, setTip}: OrderProps) {
   return (
     <div className="col-span-2 border border-gray-300 rounded-md pb-4
     md:col-span-1 md:pb-0">
@@ -42,6 +85,7 @@ export default function Order ({orders}: OrderProps) {
             <Item 
               key={order.id} 
               order={order} 
+              deleteOrder={deleteOrder}
             />
           ))
         }
@@ -52,38 +96,14 @@ export default function Order ({orders}: OrderProps) {
           Propina:
         </p>
 
-        <div className="flex items-center gap-2">
-          <label htmlFor="10%">
-            10%
-          </label>
-          <input 
-            type="radio"
-            id="10%"
-            name="propina"
+        {tips.map((tip) => (
+          <Tip
+            key={tip.value}
+            description={tip.description}
+            value={tip.value}
+            setTip={setTip}
           />
-        </div>
-
-        <div className="flex items-center gap-2">
-          <label htmlFor="20%">
-            20%
-          </label>
-          <input 
-            type="radio"
-            id="20%"
-            name="propina"
-          />
-        </div>
-
-        <div className="flex items-center gap-2">
-          <label htmlFor="50%">
-            50%
-          </label>
-          <input 
-            type="radio"
-            id="50%"
-            name="propina"
-          />
-        </div>
+        ))}
       </div>
 
       <div className="px-4 mb-8 space-y-2">
