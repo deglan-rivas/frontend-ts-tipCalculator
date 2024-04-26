@@ -1,9 +1,22 @@
 import { menuItems } from "../data/db"
+import { MenuItem } from "../types"
 
-function MenuItem ({item}) {
+interface MenuProps {
+  addOrder: (item: MenuItem) => void
+}
+
+interface MenuItemProps {
+  item: MenuItem
+  addOrder: (item: MenuItem) => void
+}
+
+function Item ({item, addOrder}: MenuItemProps) {
   const {name, price} = item
   return (
-    <div className="flex justify-between px-3 py-2 border-2 border-emerald-400 rounded-md mb-4">
+    <div className="flex justify-between px-3 py-2 border-2 border-emerald-400 rounded-md mb-4 cursor-pointer
+    hover:bg-gray-100"
+      onClick={() => addOrder(item)}
+    >
       <p>
         {name}
       </p>
@@ -14,7 +27,7 @@ function MenuItem ({item}) {
   )
 }
 
-export default function Menu () {
+export default function Menu ({addOrder}: MenuProps) {
   return (
     <div className="col-span-2
     md:col-span-1">
@@ -25,9 +38,10 @@ export default function Menu () {
       <div className="px-4">
         {
           menuItems.map((item) => (
-            <MenuItem 
+            <Item 
               key={item.id} 
-              item={item} 
+              item={item}
+              addOrder={addOrder}
             />
           ))
         }
