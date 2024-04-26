@@ -25,6 +25,18 @@ function App() {
     setOrders(orders.filter((order) => order.id !== id))
   }
 
+  function calculateSubtotal (): number {
+    return orders.reduce((total, order) => total + order.price * order.quantity, 0)
+  }
+
+  function calculateTip (): number {
+    return calculateSubtotal() * tip
+  }
+
+  function calculateTotal (): number {
+    return calculateSubtotal() + calculateTip()
+  }
+
   return (
     <>
       <h1 className="text-4xl font-semibold text-center bg-emerald-400 py-4 px-2 mb-8
@@ -41,6 +53,9 @@ function App() {
           orders={orders}
           deleteOrder={deleteOrder}
           setTip={setTip}
+          calculateSubtotal={calculateSubtotal}
+          calculateTip={calculateTip}
+          calculateTotal={calculateTotal}
         />
       </section>
     </>

@@ -4,6 +4,9 @@ interface OrderProps {
   orders: OrderItem[]
   deleteOrder: (id: OrderItem["id"]) => void
   setTip: (tip: number) => void
+  calculateTip: () => number
+  calculateSubtotal: () => number
+  calculateTotal: () => number
 }
 
 interface OrderItemProps {
@@ -70,7 +73,7 @@ function Tip ({description, value, setTip}: TipProps) {
   )
 }
 
-export default function Order ({orders, deleteOrder, setTip}: OrderProps) {
+export default function Order ({orders, deleteOrder, setTip, calculateTip, calculateSubtotal, calculateTotal}: OrderProps) {
   return (
     <div className="col-span-2 border border-gray-300 rounded-md pb-4
     md:col-span-1 md:pb-0">
@@ -114,21 +117,21 @@ export default function Order ({orders, deleteOrder, setTip}: OrderProps) {
         <p>
           Subtotal a pagar:
           <span className="font-semibold ml-1">
-            $285.00
+            ${calculateSubtotal().toFixed(2)}
           </span>
         </p>
 
         <p>
           Propina:
           <span className="font-semibold ml-1">
-            $28.50
+            ${calculateTip().toFixed(2)}
           </span>
         </p>
 
         <p>
           Total a pagar:
           <span className="font-semibold ml-1">
-            $313.50
+            ${calculateTotal().toFixed(2)}
           </span>
         </p>
       </div>
