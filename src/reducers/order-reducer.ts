@@ -1,11 +1,11 @@
 import { OrderItem } from "../types"
 
-type OrderState = {
+export type OrderState = {
   orders: OrderItem[]
   tip: number
 }
 
-type OrderActions =
+export type OrderActions =
   { type: "add-order", payload: { order: OrderItem } } |
   { type: "set-tip", payload: { tip: number } } |
   { type: "delete-order", payload: { id: OrderItem["id"] } } |
