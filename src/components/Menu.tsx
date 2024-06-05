@@ -1,21 +1,18 @@
 import { menuItems } from "../data/db"
+import { useOrders } from "../hooks/useOrders"
 import { MenuItem } from "../types"
-
-interface MenuProps {
-  addOrder: (item: MenuItem) => void
-}
 
 interface MenuItemProps {
   item: MenuItem
-  addOrder: (item: MenuItem) => void
 }
 
-function Item ({item, addOrder}: MenuItemProps) {
-  const {name, price} = item
+function Item({ item }: MenuItemProps) {
+  const { dispatch } = useOrders()
+  const { name, price } = item
   return (
     <div className="flex justify-between px-3 py-2 border-2 border-emerald-400 rounded-md mb-4 cursor-pointer
     hover:bg-gray-100"
-      onClick={() => addOrder(item)}
+      onClick={() => dispatch({ type: "add-order", payload: { menuItem: item } })}
     >
       <p>
         {name}
@@ -27,7 +24,7 @@ function Item ({item, addOrder}: MenuItemProps) {
   )
 }
 
-export default function Menu ({addOrder}: MenuProps) {
+export default function Menu() {
   return (
     <div className="col-span-2
     md:col-span-1">
@@ -38,10 +35,9 @@ export default function Menu ({addOrder}: MenuProps) {
       <div className="px-4">
         {
           menuItems.map((item) => (
-            <Item 
-              key={item.id} 
+            <Item
+              key={item.id}
               item={item}
-              addOrder={addOrder}
             />
           ))
         }

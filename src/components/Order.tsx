@@ -1,29 +1,25 @@
+import { Dispatch } from 'react';
+import { useOrders } from '../hooks/useOrders';
+import { OrderActions } from '../reducers/order-reducer';
 import { OrderItem } from '../types/index';
-
-interface OrderProps {
-  orders: OrderItem[]
-  deleteOrder: (id: OrderItem["id"]) => void
-  setTip: (tip: number) => void
-  calculateTip: () => number
-  calculateSubtotal: () => number
-  calculateTotal: () => number
-  saveOrder: () => void
-  tip: number
-}
 
 interface OrderItemProps {
   order: OrderItem
-  deleteOrder: (id: OrderItem["id"]) => void
+  dispatch: Dispatch<OrderActions>
 }
 
 interface TipProps {
-  description: string
-  value: number
-  setTip: (tip: number) => void
+  tipItem: TipItem,
+  dispatch: Dispatch<OrderActions>
   tip: number
 }
 
-const tips = [
+interface TipItem {
+  description: string
+  value: number
+}
+
+const tips: TipItem[] = [
   {
     description: "10%",
     value: 0.1
@@ -38,8 +34,8 @@ const tips = [
   }
 ]
 
-function Item ({order, deleteOrder}: OrderItemProps) {
-  const {id, name, price, quantity} = order
+function Item({ order, dispatch }: OrderItemProps) {
+  const { id, name, price, quantity } = order
   return (
     <div className="flex justify-between items-center px-5 py-4">
       <div>
@@ -51,7 +47,7 @@ function Item ({order, deleteOrder}: OrderItemProps) {
         </p>
       </div>
       <div className="w-8 h-8 p-2 text-white font-semibold bg-red-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-red-600/80"
-        onClick={() => deleteOrder(id)}
+        onClick={() => dispatch({ type: "delete-order", payload: { id } })}
       >
         X
       </div>
@@ -59,30 +55,33 @@ function Item ({order, deleteOrder}: OrderItemProps) {
   )
 }
 
-function Tip ({description, value, setTip, tip}: TipProps) {
+function Tip({ tipItem, dispatch, tip }: TipProps) {
+  const { description, value } = tipItem
   return (
     <div className="flex items-center gap-2">
       <label htmlFor={`${value}`}>
         {description}
       </label>
-      <input 
+      <input
         type="radio"
         id={`${value}`}
         name="propina"
         value={value}
-        onChange={() => setTip(value)}
+        onChange={() => dispatch({ type: "set-tip", payload: { tip: value } })}
         checked={value === tip}
       />
     </div>
   )
 }
 
-export default function Order ({orders, deleteOrder, setTip, calculateTip, calculateSubtotal, calculateTotal, saveOrder, tip}: OrderProps) {
+export default function Order() {
+  const { state, dispatch, calculateSubtotal, calculateTip, calculateTotal } = useOrders()
+
   return (
     <div className="col-span-2 border border-gray-300 rounded-md pb-4 mx-4
     md:col-span-1 md:pb-0">
       {
-        orders.length === 0 ? (
+        state.orders.length === 0 ? (
           <h2 className="text-xl text-gray-400 text-center px-4 py-4">
             La orden está vacía
           </h2>
@@ -95,11 +94,11 @@ export default function Order ({orders, deleteOrder, setTip, calculateTip, calcu
             <div className="border-y divide-y mb-8
             md:max-h-[304px] md:overflow-y-scroll">
               {
-                orders.map((order) => (
-                  <Item 
-                    key={order.id} 
-                    order={order} 
-                    deleteOrder={deleteOrder}
+                state.orders.map((order) => (
+                  <Item
+                    key={order.id}
+                    order={order}
+                    dispatch={dispatch}
                   />
                 ))
               }
@@ -113,10 +112,9 @@ export default function Order ({orders, deleteOrder, setTip, calculateTip, calcu
               {tips.map((tipItem) => (
                 <Tip
                   key={tipItem.value}
-                  description={tipItem.description}
-                  value={tipItem.value}
-                  setTip={setTip}
-                  tip={tip}
+                  tipItem={tipItem}
+                  dispatch={dispatch}
+                  tip={state.tip}
                 />
               ))}
             </div>
@@ -151,7 +149,7 @@ export default function Order ({orders, deleteOrder, setTip, calculateTip, calcu
             <div className="px-4">
               <button className="uppercase py-4 text-center bg-black text-white font-semibold w-full
               hover:bg-black/90"
-                onClick={saveOrder}
+                onClick={() => dispatch({ type: "save-order" })}
               >
                 Guardar Orden
               </button>

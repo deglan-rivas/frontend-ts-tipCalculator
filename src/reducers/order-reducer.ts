@@ -1,4 +1,4 @@
-import { OrderItem } from "../types"
+import { MenuItem, OrderItem } from "../types"
 
 export type OrderState = {
   orders: OrderItem[]
@@ -6,7 +6,7 @@ export type OrderState = {
 }
 
 export type OrderActions =
-  { type: "add-order", payload: { order: OrderItem } } |
+  { type: "add-order", payload: { menuItem: MenuItem } } |
   { type: "set-tip", payload: { tip: number } } |
   { type: "delete-order", payload: { id: OrderItem["id"] } } |
   { type: "save-order" }
@@ -21,22 +21,50 @@ export const orderReducer = (
   action: OrderActions
 ) => {
   switch (action.type) {
-    case "add-order":
+
+    case "add-order": {
+      const { id } = action.payload.menuItem
+      const currentOrder = state.orders.find((order) => order.id === id)
+      if (currentOrder) {
+        const newOrder: OrderItem = { ...currentOrder, quantity: currentOrder.quantity + 1 }
+        return {
+          ...state,
+          orders: state.orders.map((order) => order.id === id ? newOrder : order)
+        }
+      }
+
+      const newOrder: OrderItem = { ...action.payload.menuItem, quantity: 1 }
       return {
         ...state,
+        orders: [...state.orders, newOrder]
       }
-    case "set-tip":
+    }
+
+    case "set-tip": {
+
       return {
         ...state,
+        tip: action.payload.tip
       }
-    case "delete-order":
+    }
+
+    case "delete-order": {
+
       return {
         ...state,
+        orders: state.orders.filter((order) => order.id !== action.payload.id)
       }
-    case "save-order":
+    }
+
+    case "save-order": {
+
       return {
         ...state,
+        orders: [],
+        tip: 0
       }
+    }
+
     default:
       return state
   }
